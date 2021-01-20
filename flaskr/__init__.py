@@ -12,14 +12,14 @@ def create_app(test_config=None):
     def index():
         return render_template('index.html')
 
-    @app.route('/results', methods=['POST'])
+    @app.route('/', methods=['POST'])
     def results():
         text = request.form['inputTxt']
         line = get_best_line(text)
-        output = "<br>INPUT : " + text + "<br>CLOSEST MATCH : " + line['line_text']
-        output += "<br>SPEAKER : " + line['speaker'] + '<br>SEASON : ' + str(line['season']) + '<br>EPISODE : ' + str(line['episode'])
-        output += "<br>RESPONSE : " + get_response(line)['line_text']
-        return render_template('index.html') + output
+        output = "INPUT : " + text + "CLOSEST MATCH : " + line['line_text']
+        output += "SPEAKER : " + line['speaker'] + 'SEASON : ' + str(line['season']) + 'EPISODE : ' + str(line['episode'])
+        response = get_response(line)['line_text']
+        return render_template('index.html', message=response)
 
     return app
 

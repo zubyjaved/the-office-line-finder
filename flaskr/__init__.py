@@ -15,10 +15,11 @@ def create_app(test_config=None):
     @app.route('/results', methods=['POST'])
     def results():
         text = request.form['inputTxt']
-        response = get_best_line(text)
-        output = "<br>INPUT : " + text + "<br>CLOSEST MATCH : " + response['line_text']
-        output += "<br>SPEAKER : " + response['speaker'] + '<br>SEASON : ' + str(response['season']) + '<br>EPISODE : ' + str(response['episode'])
-        return output
+        line = get_best_line(text)
+        output = "<br>INPUT : " + text + "<br>CLOSEST MATCH : " + line['line_text']
+        output += "<br>SPEAKER : " + line['speaker'] + '<br>SEASON : ' + str(line['season']) + '<br>EPISODE : ' + str(line['episode'])
+        output += "<br>RESPONSE : " + get_response(line)['line_text']
+        return render_template('index.html') + output
 
     return app
 
@@ -37,3 +38,10 @@ def get_best_line(text):
                 bestRatio = ratio
 
         return bestLine
+ 
+# Given a line, returns the next one
+def get_response(line):
+    with open('flaskr/static/office-script.json') as f:
+        data = json.load(f)
+        id = line['id'] + 1
+        return data[id]

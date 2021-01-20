@@ -43,5 +43,6 @@ def get_best_line(text):
 def get_response(line):
     with open('flaskr/static/office-script.json') as f:
         data = json.load(f)
-        id = line['id'] + 1
+        # The id gives the next elements index.
+        id = line['id']
         return data[id]
